@@ -1,0 +1,146 @@
+---
+title: "BASIC R FOR SOCIAL SCIENTISTS"
+author: "Nhung Nguyen"
+date: "2023-06-02"
+output:
+  revealjs::revealjs_presentation:
+    theme: "moon"
+    transition: "fade"
+    slideNumber: true
+    column_width: 50%
+    css: styles.css
+editor_options: 
+  markdown: 
+    wrap: sentence
+
+---
+
+# Types of Data
+
+-   numeric - (10.5, 55, 787)
+
+-   integer - (1L, 55L, 100L, where the letter "L" declares this as an integer)
+
+-   complex - (9 + 3i, where "i" is the imaginary part)
+
+-   character (a.k.a. string) - ("k", "R is exciting", "FALSE", "11.5")
+
+-   logical (a.k.a. boolean) - (TRUE or FALSE)
+
+------------------------------------------------------------------------
+
+# Data structure 1
+
+-   **Vector:** A vector is simply a list of items that are of the same type.
+    To combine the list of items to a vector, *c() function, separate the items by a comma.*
+
+-   **List:** can contain many different data types inside it.
+    A list is a collection of data which is ordered and changeable.
+    *list() function.*
+
+-   **Data frame:** are data displayed in a format as a table.
+    Data Frames can have different types of data inside it.
+    While the first column can be character, the second and third can be numeric or logical.
+    However, each column should have the same type of data.
+    *data.frame() function*
+
+------------------------------------------------------------------------
+
+# Data structure 2
+
+-   **Matrice:** two dimensional data set with columns and rows.
+    +) A column is a vertical representation of data, while a row is a horizontal representation of data.
+    *matrix() function, Specify the nrow and ncol parameters*
+
+-   **Arrays:** Compared to matrices, arrays can have more than two dimensions.
+    *array() function, the dim parameter to specify the dimensions.*
+
+-   **Factors:** are used to categorize data.
+    *factor() function and add a vector as argument.*
+
+    \+) Demography: Male/Female
+
+    \+) Music: Rock, Pop, Classic, Jazz
+
+------------------------------------------------------------------------
+
+# Convert data to a certain types
+
+-   Convert data into a list: '`as.list()`'
+
+-   Convert data into a matrix: '`as.matrix()`'
+
+-   Convert data into an array: '`as.array()`'
+
+-   Convert data into an factor: '`as.factor()`'
+
+-   Convert data into an integer: '`as.integer()`'
+
+-   Convert data into an character: '`as.character()`'
+
+------------------------------------------------------------------------
+
+# R for Data Analysis
+
+-   Chi-Square: 'chisq.test()'
+
+-   T-Test (One sample, two samples): 't.test()'
+
+-   ANOVA (three group, compare with-in and between groups: 'aov(formula, data)'
+
+-   Regression (simple, multiple, interaction, high order: 'lm(formula, data)'
+
+-   Logistic 'glm(formula, data, family)',
+
+-   Decision tree 'ctree(formula, data)'
+
+-   Random forest 'randomForest(formula,data)',
+
+------------------------------------------------------------------------
+
+# R for Data Analysis
+
+-   Bootstrapping (boot(data, statistic, R, formula)
+
+-   Feature selection 
+
+-   Bagging
+
+-   Cluster analysis 
+
+-   Multivariate analysis (Two way ANOVA, MANOVA, MANCOVA, Canonical analysis, 
+    Profile analysis, CFA, and EFA)
+
+-   Multilevel Modelling (MLM)
+
+-   Structure Equation Modelling (SQM)
+
+------------------------------------------------------------------------
+
+# Text mining 
+
+- Pre-processing 
+
+- Making frequency table 
+
+- Arranging order
+
+- N-grams 
+
+- Plotting chart 
+
+- Sentiment analysis 
+
+- Topic Modelling 
+
+------------------------------------------------------------------------
+
+# Text mining 
+
+- Named Entity Recognition and Text Classification
+
+- Word Embeddings and Deep Learning
+
+- Advanced NLP Techniques
+
+# Thank you for your attention!!!
