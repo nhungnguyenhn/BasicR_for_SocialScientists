@@ -1,0 +1,270 @@
+---
+title: "BASIC R FOR SOCIAL SCIENCES"
+author: "Nhung Nguyen"
+date: "2023-06-02"
+output:
+  revealjs::revealjs_presentation:
+    theme: "moon"
+    transition: "fade"
+    slideNumber: true
+    column_width: 50%
+    css: styles.css
+---
+
+# R, R studio and R Markdown
+
+::: logos-slide
+<img src="R_logo.png" alt="Logo 1" class="logo"/> <img src="R_studio.png" alt="Logo 2" class="logo"/> <img src="R_markdown.png" alt="Logo 3" class="logo"/>
+:::
+
+-   **R**: is a programming language, it allows to do many different tasks
+
+-   **R studio**: is a layout that you can code R and do everything you do in R. You can also code Python, Bash, or SQL.
+
+-   **R markdown**: is an interface between coder and R studio.
+
+------------------------------------------------------------------------
+
+# What R can do
+
+-   Web-design
+
+-   Creating presentations
+
+-   Statistical analysis
+
+-   Text analysis
+
+-   Machine learning
+
+...and more!!!
+
+------------------------------------------------------------------------
+
+# Fundamental elements of R
+
+-   Packages (e.g. "tidyverse", install.packages("package_name"))
+
+-   Library (e.g. library("package_name"))
+
+-   Functions (e.g. summary(data))
+
+-   Arguments (e.g. select(data, column_name))
+
+-   Code chunk and Notes
+
+#\`\`\`{r}
+
+#\`\`\`
+
+#this is a note
+
+
+## \*\*\*RStudio won't run notes but it will run anything in a codechunk
+
+# What will we learn?
+
+-   Structure of data management
+
+-   Statistic in R
+
+-   Data Wrangling
+
+-   Visualization
+
+-   Text mining in R
+
+------------------------------------------------------------------------
+
+# Data organization and management
+
+-   RMarkdown - GoogleColab - VSCode - Quatro
+
+-   Directory
+
+-   Project
+
+-   Input files:  (csv, photos, logos etc.))
+
+-   Format files (texts)
+
+-   Output files: RMarkdown files, Html files, PDF, Words.
+
+-   Saving and Knitting
+
+------------------------------------------------------------------------
+
+# Elements of Data
+
+-   Dataframes, vectors, tibbles, strings, etc. 
+
+-   Name variables
+
+-   Object
+
+
+------------------------------------------------------------------------
+
+# Data Wrangling1
+
+-   Pipeline mutate( %>% / |> ) and mutate()
+
+-   Reform columns (e.g. as.character(), as.factors())
+
+-   Rename columns (e.g. rename(new_column = old_column))
+
+-   Recode values in variables (x <- recode(x, `3` = 10, `4` = 20))
+
+-   Summary()
+
+-   Missing data (e.g. is.na(df$column_name), is.na(df), summary())
+
+------------------------------------------------------------------------
+
+# Data Wrangling2
+-   Pivot longer 
+(e.g. df_long <- pivot_longer(
+  df, cols = .., names_to = ..., values_to = ...)
+
+- Pivot wider
+ (e.g. df_wide <- pivot_wider(
+  df, names_from = ..., values_from = ...)
+  
+- Join data (left_join, right_join, inner_join, full_join)
+
+-   Groups and Count (e.g.table(df$variable), 
+
+df %>%
+  group_by(variable1, variable2) %>%
+  summarize(count = n())
+
+------------------------------------------------------------------------
+
+# Visualization of data and models
+
+```{r message = FALSE}
+#install.packages("ggplot2")
+library(ggplot2)
+```
+
+- Histogram
+
+- Boxplot
+
+- Barplot
+
+- Scatte plot  and more...@
+
+
+
+
+------------------------------------------------------------------------
+
+# Histogram
+
+```{r}
+# Generate random data
+data <- rnorm(1000)
+# Convert data to a data frame
+df <- data.frame(data = data)
+# Create a histogram using ggplot2 
+plot1 <- ggplot(df, aes(x = data)) +
+  geom_histogram(fill = "steelblue", bins = 30) +
+  labs(title = "Histogram", x = "Data", y = "Frequency") 
+# Save plot1 as a PNG file
+ggsave("plot1.png", plot1, dpi = 250)
+```
+
+------------------------------------------------------------------------
+
+# Histogram
+<img src="plot1.png" alt="Hist 1" class="Hist"/> 
+
+
+------------------------------------------------------------------------
+
+# - Boxplot 
+
+```{r}
+# Set seed for reproducibility
+set.seed(123)
+# Generate random data
+data1 <- rnorm(100)
+data2 <- rnorm(100)
+data3 <- rnorm(100)
+data4 <- rnorm(100)
+data5 <- rnorm(100)
+# Create a data frame with all the random data
+df2 <- data.frame(
+  Group = rep(c("Group 1", "Group 2", "Group 3", "Group 4", "Group 5"), each = 100),
+  Data = c(data1, data2, data3, data4, data5))
+# Create a grouped boxplot using ggplot2
+plot2 <- ggplot(df2, aes(x = Group, y = Data)) +
+  geom_boxplot(width = 0.5, outlier.shape = NA, fill = "steelblue") +
+  labs(title = "Grouped Boxplot", x = "Group", y = "Data") +
+  theme_minimal()
+# Save plotplo2 as a PNG file
+ggsave("plot2.png", plot2, dpi = 250)
+```
+
+------------------------------------------------------------------------
+
+# boxplot
+<img src="plot2.png" alt="Box 1" class="Box"/> 
+
+
+------------------------------------------------------------------------
+
+# Bar-gram 
+
+```{r}
+# Sample data
+x <- c("A", "B", "C", "D")
+y <- c(10, 15, 7, 12)
+data2 <- data.frame(Category = x, Value = y)
+# Create bar plot using ggplot2
+plot3 <- ggplot(data2, aes(x = Category, y = Value)) +
+  geom_bar(stat = "identity", fill = "blue") +
+  labs(title = "Bar Plot Example", x = "Categories", y = "Values")
+# Save plot3 as a PNG file
+ggsave("plot3.png", plot3, dpi = 250)
+```
+------------------------------------------------------------------------
+
+# Bar-gram 
+<img src="plot3.png" alt="Bar 1" class="Bar"/> 
+
+
+------------------------------------------------------------------------
+# Scatter plot
+```{r}
+# Generate random data
+set.seed(123)  # Set seed for reproducibility
+n <- 100       # Number of data points
+x <- rnorm(n, mean = 5, sd = 2)
+y <- rnorm(n, mean = 10, sd = 3)
+# Create scatter plot using ggplot2
+df3 <- data.frame(x = x, y = y)
+plot4 <- ggplot(df3, aes(x, y)) +
+  geom_point() +
+  labs(title = "Scatter Plot with Random Data", x = "X", y = "Y")
+# Save plot5 as a PNG file
+ggsave("plot4.png", plot4, dpi = 250)
+
+```
+
+------------------------------------------------------------------------
+
+# Scatter plot
+<img src="plot4.png" alt="Point 1" class="Point"/> 
+
+
+------------------------------------------------------------------------
+
+# Q&A and PRACTICE
+
+------------------------------------------------------------------------
+
+
+
+# Thank you for your attention!!!
