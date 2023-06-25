@@ -1,0 +1,373 @@
+---
+title: "Lesson2_Practice"
+author: "Nhung Nguyen"
+date: "2023-06-10"
+output: html_document
+---
+
+#I. Example of data types 
+```{r}
+# numeric
+x <- 10.5
+class(x)
+
+# integer
+x <- 1000L
+class(x)
+
+# complex
+x <- 9i + 3
+class(x)
+
+# character/string
+x <- "R is exciting"
+class(x)
+
+# logical/boolean
+x <- TRUE
+class(x) 
+```
+
+#II. Create data set
+```{r}
+#Create a vector
+data <- c(1, 2, 3, 4, 5)
+data
+#Create a list
+data1 <- list("John", 25, c(1, 2, 3))
+data
+#Create a dataframe**
+
+data2 <- data.frame(Name = c("John", "Alice", "Bob"),
+                   Age = c(25, 30, 35),
+                   Grade = c("A", "B", "C"))
+
+data2
+
+#Create a matrix
+data3 <- matrix(c(1, 2, 3, 4, 5, 6), nrow = 2, ncol = 3)
+data3
+
+#Create an array
+data4 <- array(c(1, 2, 3, 4, 5, 6), dim = c(2, 3, 1))
+data4
+
+#Create a factor
+data5 <- factor(c("Red", "Green", "Blue", "Red", "Green"))
+data5
+```
+
+
+
+#Convert data to some certain types 
+
+```{r}
+# Convert data into a list
+data7 <- c(1, 2, 3, 4, 5)
+list_data <- as.list(data)
+list_data
+
+# Convert data into a matrix
+data8 <- c(1, 2, 3, 4, 5)
+matrix_data <- as.matrix(data)
+matrix_data
+
+# Convert data into an array
+data10 <- c(1, 2, 3, 4, 5)
+arr <- array(data, dim = c(1, length(data)))
+arr
+
+```
+
+#STRING
+
+```{r}
+# Creating a string using single quotes
+str1 <- 'Hello, World!'
+
+# Creating a string using double quotes
+str2 <- "Welcome to R programming!"
+
+# Creating a string with special characters
+str3 <- "I'm learning R."
+
+# Creating a multiline string using triple quotes
+str4 <- "This is a
+multiline
+string."
+
+# Concatenating strings
+str5 <- "Hello"  # First part of the string
+str6 <- "World!"  # Second part of the string
+concatenated_str <- paste(str5, str6)  # Concatenating the two strings
+#If you want to concatenate strings without any separation, you can use the paste0() function instead.
+
+# Printing the strings
+print(str1)
+print(str2)
+print(str3)
+print(str4)
+print(concatenated_str)
+```
+
+#Give yourself some compliments
+
+```{r}
+library(praise)
+praise()
+```
+
+#Chi-square
+
+```{r}
+library(tidyverse)
+```
+
+```{r}
+#cars
+mtcars #Motor Trend Car Road Tests
+#The "am" variable is a categorical variable that indicates the type of transmission of the car models. It takes two distinct values: "0" indicates an automatic transmission. "1" indicates a manual transmission.
+#variable "mpg" represents the "Miles Per Gallon" for the car models.
+```
+
+#Exploring data 
+
+```{r}
+summary(mtcars)
+summary(mtcars$cyl)
+table(mtcars$cyl)
+class(mtcars$cyl)
+```
+
+
+```{r}
+# Load the library.
+library("MASS")
+library("tidyverse")
+#run chi-square test 
+result_chi <- chisq.test(mtcars$mpg, mtcars$am)
+result_chi
+```
+
+# Create the plot using ggplot2
+
+```{r }
+#library(ggplot2)
+#ggplot(result_chi, aes(x = factor(am), y = mpg, fill = factor(am))) +
+ # geom_boxplot() +
+ # labs(x = "Transmission Type", y = "Miles Per Gallon", title = "Miles Per Gallon by Transmission Type") +
+ # scale_fill_manual(values = c("blue", "red")) +
+ # theme_minimal()
+```
+
+#ANOVA TEST 
+## Introduction to the data set 
+```{r}
+iris
+```
+
+##Exploring the dataset 
+```{r}
+summary(iris)
+```
+
+##Ploting to see the descriptive statistic 
+```{r}
+# Load the iris dataset
+data(iris)
+
+# Create a violin plot
+ggplot(iris, aes(x = Species, y = Sepal.Length)) +
+  geom_violin(fill = "pink") +
+  labs(x = "Species", y = "Sepal Length", title = "Violin Plot of Sepal Length by Species")
+```
+##Run ANOVA test 
+
+```{r}
+# Run ANOVA
+anova_result <- aov(Sepal.Length ~ Species, data = iris)
+anova_result 
+
+# Print the ANOVA table
+summary(anova_result)
+
+```
+
+##Inspect parameter of the model 
+
+```{r}
+library(parameters)
+model_parameters(anova_result)
+```
+Interpretation: Our test statistic is F = 119.26 and our p-value is < .001 (thus significant at α =.001). So we would reject the null hypothesis that the groups' population means are all equal. 
+
+
+##To estimate the model-implied group means, you can use ggeffect()
+```{r}
+library(ggeffects)
+gge <- ggeffect(anova_result, "Species")
+gge
+```
+
+Practice: What are the group mean and 95% CI and how to interperet them? 
+
+##Plotting the group means
+
+```{r}
+plot(gge, connect.lines = TRUE)
+```
+
+##The effect size 
+```{r}
+library(effectsize)
+eta_squared(anova_result)
+```
+
+Interpret:  62% of the variation in sepal-lengh was between-groups (of the Species). 38% of the variation in salaries was within-groups (within one Species). 
+ 
+##Post-hoc Test Holm: 
+
+```{r}
+ptt <- pairwise.t.test(x = iris$Sepal.Length, g = iris$Species)
+model_parameters(ptt)
+```
+
+***Interpret***: Post hoc tests (using the Holm correction to adjust p) indicated that all groups are diffent in Sepal.Length. 
+ 
+###Post-hoc Test using Bonferroni: 
+ 
+```{r}
+ptt1 <- pairwise.t.test(x = iris$Sepal.Length, g = iris$Species,
+                       p.adjust.method = "bonferroni")
+model_parameters(ptt1)
+```
+ 
+#TEXT MINING 
+#loading the packages  
+```{r}
+library(dplyr)
+library(tidytext)
+library(tidyr)
+```
+
+#import data 
+```{r}
+data_gov <- read_csv("data_gov.csv")
+data_gov
+```
+ 
+ 
+ - Using `unnest_tokens` to put each word in a row. - Often in text analysis, we will want to remove stop words, which are We can remove stop words words that are not useful for an analysis, typically extremely common words such as “the,” “of,” “to,” and so forth in English. We can remove stop words (kept in the tidy‐text dataset stop_words) with an `anti_join()`.
+ 
+#count the number of tweets by username
+```{r}
+tweet_counts <- data_gov %>%
+  group_by(username) %>%
+  summarize(tweet_count = n())
+tweet_counts
+```
+ 
+# tokenize 
+```{r}
+datat_gov1 <- data_gov %>%
+     unnest_tokens(word, tweet) 
+datat_gov1
+```
+
+# remove stop words 
+#stop_words
+
+```{r}
+datat_gov2 <- datat_gov1 %>%
+      anti_join(stop_words) %>% 
+      count(word, sort = TRUE) 
+datat_gov2
+```
+
+#I then tried to remove the left over stop-words that are not useful for analysis and plot them. The list of words that does not make sense
+
+```{r}
+remove.list = paste(c("t.co" , "19", "tco", "https", "2", "http", "pic.twitter.com", "pictwittercom"), collapse = '|')
+```
+
+#plot a column 
+```{r}
+datat_gov2 %>% 
+  filter(!str_detect(word, remove.list)) %>% 
+  filter(n > 15) %>%
+  mutate(word = reorder(word, n)) %>% 
+  
+  ggplot(aes(word, n)) +
+  geom_col(color = "dark green", fill = "pink") +
+  labs(title = "Most frequence word", x = "Words", y = "Numbers of Occurance") +
+  coord_flip()
+```
+
+#Preprocess data 
+##Write a function to pre-process data
+```{r}
+library(tidyverse)
+library(tm)
+
+# Convert the 'tweet' column to character vector
+data_gov$tweet <- as.character(data_gov$tweet)
+
+# Define the preprocessing steps as a function
+preprocess_data <- function(data) {
+  # Remove short words
+  data <- data %>%
+    mutate(tweet = str_remove_all(tweet, "\\b\\w{1,2}\\b"))
+  
+  # Remove numbers
+  data <- data %>%
+    mutate(tweet = str_remove_all(tweet, "\\d+"))
+  
+  # Remove icons and special characters
+  data <- data %>%
+    mutate(tweet = str_remove_all(tweet, "[^[:alnum:]\\s]"))
+  
+  # Remove extra spaces
+  data <- data %>%
+    mutate(tweet = str_replace_all(tweet, "\\s+", " "))
+  
+  # Convert to lowercase
+  data <- data %>%
+    mutate(tweet = tolower(tweet))
+  
+  # Remove stopwords
+  data <- data %>%
+    mutate(tweet = removeWords(tweet, stopwords("english")))
+  
+  return(data)
+}
+
+```
+
+# Apply the function to preprocess the data
+```{r}
+preprocessed_data_gov <- preprocess_data(data_gov)
+preprocessed_data_gov
+```
+
+#create bigrams
+```{r}
+data_gov_bigram <- preprocessed_data_gov %>%
+  unnest_tokens(bigram, tweet, token = "ngrams", n = 2) %>%
+  count(bigram, sort = TRUE) %>%
+  separate(bigram, c("word1", "word2"), sep = " ") %>% 
+  unite(bigram, word1, word2, sep = " ") 
+data_gov_bigram
+```
+
+#create trigrams
+```{r}
+data_gov_trigram <- preprocessed_data_gov %>%
+  unnest_tokens(trigram, tweet, token = "ngrams", n = 3) %>%
+  count(trigram, sort = TRUE) %>%
+  separate(trigram, c("word1", "word2", "word3"), sep = " ") %>% 
+  unite(bigram, word1, word2, word3, sep = " ")
+data_gov_trigram
+```
+
+ 
+ 
