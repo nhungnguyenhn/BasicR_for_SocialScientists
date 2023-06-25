@@ -1,0 +1,17 @@
+/* styles.css */
+
+.logos-slide {
+  display: flex;
+  justify-content: space-between;
+}
+
+.logos-slide .logo {
+  width: auto;
+  height: calc(33.33% - 10px);
+  max-height: 200px;
+}
+
+.reveal .slides .plot-container {
+  width: 50%;
+  height: 50%;
+}
