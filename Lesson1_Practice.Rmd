@@ -1,0 +1,261 @@
+---
+title: "Lesson1_Practice"
+author: "Nhung Nguyen"
+date: "2023-06-02"
+output: html_document
+---
+This is the practicing codes for the first lesson of the course
+
+#call the packages 
+```{r}
+library(tidyverse)
+library(dplyr)
+```
+#If the data is availabe in R, just all its name
+```{r}
+data(cars)
+cars
+```
+
+#Some other available data sets in R 
+```{r}
+#cars
+#mtcars #Motor Trend Car Road Tests
+#diamonds
+#iris
+#summary(cars) #https://rpubs.com/dksmith01/cars
+#summary(diamonds) #https://bookdown.org/yih_huynh/Guide-to-R-Book/diamonds.html
+#summary(iris) #https://www.statology.org/iris-dataset-r/
+#Other good dataset (http://www.sthda.com/english/wiki/r-built-in-data-sets#iris)
+   # ToothGrowth
+   # PlantGrowth
+   # USArrests
+```
+
+#Call a .csv file 
+```{r}
+p1 <- read_csv("cars.csv")
+p1
+```
+
+#Call an excel file 
+
+```{r}
+# Install and load the readxl package
+library(openxlsx)
+# Read Excel file into R
+p2 <- read.xlsx("cars.xlsx", sheet = 1)
+p2
+```
+
+
+#Call a .sav file 
+```{r}
+library(haven)
+# Read SPSS (.sav) file into R
+p3 <- read_sav("cars.sav")
+p3
+```
+
+#FUNCTION 
+
+```{r}
+summary(p1)
+summary(p2)
+summary(p3)
+```
+
+#TIBLE and DATAFRAME 
+
+```{r}
+#it is a tible 
+p1 
+# Convert tibble to dataframe
+p1_df <- as.data.frame(p1)
+p1_df
+```
+
+#DATA WRANGLING 
+
+#change variable name 
+
+```{r}
+p1_mutate <- p1 %>% 
+  rename(max_speed = speed, max_dist = dist) 
+p1_mutate 
+```
+
+#change variable types 
+
+```{r}
+p1_mutate1 <- p1_mutate %>% 
+  mutate(max_speed = as.factor(max_speed), 
+         max_dist = as.factor(max_dist))
+p1_mutate1 
+```
+
+```{r}
+levels(p1_mutate1$max_speed)
+```
+
+
+#select variables 
+```{r}
+p1_mutate2 <- p1_mutate1 %>% 
+  select(max_speed)
+p1_mutate2 
+```
+
+###Now we can pipe of these in one chunk 
+
+```{r}
+p1_mutate <- 
+  p1 %>% 
+  rename(max_speed = speed, max_dist = dist) %>% 
+  mutate(max_speed = as.factor(max_speed), 
+         max_dist = as.factor(max_dist)) %>% 
+  select(max_speed)
+p1_mutate 
+```
+
+
+#PIVOT_WIDER and #PIVOT_LONGER 
+
+
+#from wide to long format 
+```{r}
+data <- data.frame(ID1 = LETTERS[1:4],        # Create example data
+                   ID2 = rep(letters[1:3], each = 4),
+                   measure_1 = 1:12,
+                   measure_2 = 21:32)
+data                                          # Print example data
+```
+
+
+```{r}
+# Install & load tidyr package
+library("tidyr")
+```
+
+```{r}
+ # Convert wide to long
+data_long <- pivot_longer(data = data,       
+                          cols = c("measure_1", "measure_2"))
+data_long   
+```
+
+#from long to wide format 
+```{r}
+data_wide <- pivot_wider(data = data_long)    # Convert long to wide
+data_wide                                     # Print wide data
+```
+
+#JOIN DATA: you have to have at least 1 column that match
+
+```{r}
+df1 = data.frame(CustomerId = c(1:6), Product = c(rep("Toaster", 3), rep("Radio", 3)))
+df1
+df2 = data.frame(CustomerId = c(2, 4, 6), State = c(rep("Alabama", 2), rep("Ohio", 1)))
+df2
+```
+
+
+```{r}
+#inner
+inner_join(df1, df2)
+
+#left outer
+left_join(df1, df2)
+
+#right outer
+right_join(df1, df2)
+
+#full join
+full_join(df1, df2)
+```
+
+
+```{r}
+#keep only observations in df1 that match in df2.
+semi_join(df1, df2)
+
+#drop all observations in df1 that match in df2 (2-4-6), keep the observations do not match (1-3-5).
+anti_join(df1, df2)
+
+#merge only keep what match- 
+merge(df1, df2)
+```
+
+#VISUALIZATION 
+
+```{r}
+library(ggplot2)
+```
+
+#Histogram 
+```{r}
+ggplot(data = cars, aes(x = speed)) +
+  geom_histogram(fill = "salmon")
+
+ggplot(data = cars, aes(x = dist)) +
+  geom_histogram(fill = "blue") +
+  theme_minimal()
+```
+
+#Bar_plot 
+```{r}
+ggplot(data = cars, aes(x = speed)) +
+  geom_bar(fill = "salmon")
+
+ggplot(data = cars, aes(x = speed)) +
+  geom_bar(fill = "blue")
+```
+#boxplot
+
+```{r}
+ggplot(data = mtcars) +
+  geom_boxplot(aes(x = "", y = mpg)) +
+  geom_boxplot(aes(x = "", y = disp), fill = "steelblue", color = "black") +
+  labs(title = "Boxplot of MPG and Disp",
+       y = "Value") +
+  theme_minimal()
+
+```
+
+
+#boxplots for many variables
+```{r}
+#group of variables 
+variables <- c("mpg", "disp", "hp", "drat", "cyl")
+#boxplot
+ggplot(data = reshape2::melt(mtcars[, variables])) +
+  geom_boxplot(aes(x = variable, y = value)) +
+  labs(title = "Boxplot of Selected Variables in mtcars",
+       x = "Variable",
+       y = "Value") +
+  theme_minimal()
+
+#mpg: mile per gallon 
+#engine displacement (capacity)
+#hp: horsepower 
+#drat: rear axle ratio
+#cyl:cylinders 
+```
+#scatte plot
+```{r}
+ggplot(data = mtcars, aes(x = mpg, y = hp)) +
+  geom_point()
+
+```
+#add a regression line to explain the data
+```{r}
+ggplot(data = mtcars, aes(x = mpg, y = hp)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE, color = "red") +
+  labs(title = "Scatter Plot of MPG vs. HP with Regression Line",
+       x = "Miles per Gallon",
+       y = "Horsepower") +
+  theme_minimal()
+
+```
+
