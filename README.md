@@ -1,5 +1,5 @@
 # BasicR_for_SocialScientists
-This project was create to train social scientists the explore basic R for data wrangling and data analys. 
+This project was created to train social scientists the explore basic R for data wrangling and data analysis. 
 Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)
 
 This is a human-readable summary of (and not a substitute for) the license. You are free to:
